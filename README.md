@@ -1,4 +1,4 @@
-# matrix-react-native-dev-plugin
+# ono-react-native-dev-plugin
 
 A [Claude Code](https://claude.com/claude-code) plugin encoding Ono Apps' React Native SDLC workflow: a seven-stage pipeline that takes a feature from analysis to release, with a human approval gate between every stage.
 
@@ -9,14 +9,14 @@ Each stage is a slash command backed by a dedicated skill and specialized subage
 From the marketplace:
 
 ```
-/plugin marketplace add MagenOnoapps/onoapps-claude-plugins
-/plugin install matrix-react-native-dev-plugin@onoapps-claude-plugins
+/plugin marketplace add appsadmin-design/ono-plugin-marketplace
+/plugin install ono-react-native-dev-plugin@ono-plugin-marketplace
 ```
 
 Local (for development of the plugin itself):
 
 ```bash
-claude --plugin-dir /path/to/onoapps-claude-plugins/matrix-react-native-dev-plugin
+claude --plugin-dir /path/to/ono-react-native-dev-plugin
 ```
 
 ## Quick start
