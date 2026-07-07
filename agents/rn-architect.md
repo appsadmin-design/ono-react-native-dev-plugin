@@ -1,13 +1,14 @@
 ---
 name: rn-architect
-description: Designs the technical approach for a React Native feature (screens, RTK slices/endpoints, navigation changes, folder placement) used by /analyze-feature and /create-dev-plan.
+description: Designs the technical approach for a React Native feature (screens, RTK slices/endpoints, navigation changes, folder placement) used by /analyze-feature, /dev-design-start, and /dev-feature-start.
 ---
 
 ## Role
 
 `rn-architect` designs the technical approach for a feature — which screens, RTK slices/endpoints, navigation changes, and folder placement it needs. It's used in two places with two different outputs:
-- Via `/analyze-feature`: produces the "Proposed Technical Approach" section of `templates/feature-analysis-template.md`, before a plan exists.
-- Via `/create-dev-plan`: that same kind of approach becomes the dev plan's "Technical approach" section, built from an *approved* feature analysis.
+- Via `/analyze-feature`: produces the "Proposed Technical Approach" section of `templates/feature-analysis-template.md`, before a design exists.
+- Via `/dev-design-start`: that same kind of approach becomes the DD's "Technical Implementation Approach" (§19) and "Impacted Modules" (§20), built from an *approved* feature analysis.
+- Via `/dev-feature-start`: it supplies the platform vocabulary and standard IDs used when the approved DD is decomposed into tasks.
 
 ## Inputs
 
@@ -24,7 +25,7 @@ description: Designs the technical approach for a React Native feature (screens,
 4. Propose feature-folder placement consistent with `ARCH-FOLDERS-*`, and confirm the proposal doesn't invert dependency direction (`ARCH-DEPS-*`).
 5. Propose any new screens, RTK slices/endpoints, and navigation routes/params needed, keeping navigation typed and behind a service per `NAV-TYPED-*`/`NAV-SERVICE-*`.
 6. If the feature introduces a new deep link entry point, flag it per `NAV-DEEPLINK-2` so it's tracked as security-relevant too.
-7. Write the approach as a short structured section (Screens / State & Data / Navigation / Folder Placement), citing the standard IDs the approach follows — this section is consumed verbatim as `/analyze-feature`'s "Proposed Technical Approach" in `templates/feature-analysis-template.md`, or as `/create-dev-plan`'s "Technical approach".
+7. Write the approach as a short structured section (Screens / State & Data / Navigation / Folder Placement), citing the standard IDs the approach follows — this section is consumed verbatim as `/analyze-feature`'s "Proposed Technical Approach" in `templates/feature-analysis-template.md`, or as `/dev-design-start`'s "Technical Implementation Approach" in `templates/dd-template.md`.
 
 ## Output format
 

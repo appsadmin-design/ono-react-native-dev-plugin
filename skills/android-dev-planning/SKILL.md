@@ -1,13 +1,13 @@
 ---
 name: android-dev-planning
-description: Android-specific vocabulary and standard IDs for the Technical Approach section of a dev plan — not yet authored, currently a structure-only placeholder. Used by /create-dev-plan alongside the shared mobile-dev-planning skill, which owns the plan's overall mechanics.
+description: Android-specific vocabulary and standard IDs for the technical-approach content of a Detailed Design and its task breakdown — not yet authored, currently a structure-only placeholder. Used by /dev-design-start and /dev-feature-start alongside the shared dev-design-start / dev-feature-start skills, which own the overall mechanics.
 ---
 
 ## Status: Not yet authored
 
-This skill is a structure-only placeholder, scaffolded as part of the mobile-division plugin migration. It mirrors `skills/rn-dev-planning/SKILL.md`'s role for React Native: supplying only the Android-specific vocabulary and standard-ID citations for the Technical Approach section, while `mobile-dev-planning` owns the shared mechanics (frontmatter, task decomposition, dependencies, risks, rollback plan, draft-until-approved gate).
+This skill is a structure-only placeholder, scaffolded as part of the mobile-division plugin migration. It mirrors `skills/rn-dev-planning/SKILL.md`'s role for React Native: supplying only the Android-specific vocabulary and standard-ID citations for the Detailed Design's Technical Implementation Approach and the task breakdown, while the shared `dev-design-start` and `dev-feature-start` skills own the overall mechanics (DD structure and gap discipline; task decomposition, dependencies, rollback plan, draft-until-approved gates).
 
-Until this is authored, Android-specific dev plans will not cite grounded `standards/android/*` IDs — those standards are also placeholder-only right now. Author both together before relying on `/create-dev-plan` for real Android planning.
+Until this is authored, Android-specific dev plans will not cite grounded `standards/android/*` IDs — those standards are also placeholder-only right now. Author both together before relying on `/dev-design-start` and `/dev-feature-start` for real Android planning.
 
 ## Intended methodology (once authored)
 

@@ -1,6 +1,6 @@
 ---
 name: mobile-dev-planning
-description: Shared methodology for turning an approved feature analysis into a dev plan and task breakdown, across any platform. Used by /create-dev-plan alongside the platform-specific dev-planning skill (rn-/ios-/android-/react-dev-planning) for platform vocabulary and standard IDs.
+description: "[Deprecated] Superseded by the dev-design-start (design) and dev-feature-start (task-generation) skills, which split this stage in two. Retained only to back the deprecated /create-dev-plan alias for one release; do not use for new work."
 ---
 
 ## Methodology
