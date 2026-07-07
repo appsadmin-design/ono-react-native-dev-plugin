@@ -12,13 +12,13 @@ description: Methodology for implementing a planned task in a React Native codeb
 3. **If the task touches UI, resolve the Figma link.** Check the dev plan's `figma_link`. If it's empty, stop and ask the human for one — don't guess spacing/color/typography from the task description. If present, pull Dev Mode specs and Code Connect mappings for the relevant frame via the `figma` MCP server and implement to match.
 
 4. **Identify applicable standards** for the files/surfaces the task touches:
-   - Coding conventions: `standards/react-native-coding-standards.md`.
-   - Data fetching: `standards/api-service-layer-standards.md`.
-   - Shared state: `standards/state-management-standards.md`.
-   - UI text/layout direction: `standards/i18n-rtl-standards.md`.
-   - UI accessibility: `standards/accessibility-standards.md`.
-   - Folder placement/dependency direction: `standards/architecture-principles.md`.
-   - Screen/route changes: `standards/navigation-standards.md`.
+   - Coding conventions: `standards/react-native/react-native-coding-standards.md`.
+   - Data fetching: `standards/react-native/rn-api-service-layer.md`.
+   - Shared state: `standards/react-native/rn-state-management.md`.
+   - UI text/layout direction: `standards/shared/i18n-rtl.md`.
+   - UI accessibility: `standards/shared/accessibility.md`.
+   - Folder placement/dependency direction: `standards/react-native/rn-architecture.md`.
+   - Screen/route changes: `standards/react-native/react-navigation.md`.
 
 5. **Implement the change**, applying each identified standard's checklist as you go rather than as an afterthought.
 

@@ -11,8 +11,8 @@ description: Designs the technical approach for a React Native feature (screens,
 
 ## Inputs
 
-- `repo-analyst`'s structured findings summary (navigation/state/data-fetching/testing/folder conventions actually in use).
-- `standards/architecture-principles.md` and `standards/navigation-standards.md`.
+- `repo-analyst`'s structured findings summary (navigation/state/data-fetching/testing/folder conventions actually in use), used only when the detected platform is react-native.
+- `standards/react-native/rn-architecture.md` and `standards/react-native/react-navigation.md`.
 - The feature description or DD link being analyzed/planned.
 - A Figma file/frame link, when the feature involves new or changed UI — via the `figma` MCP server.
 

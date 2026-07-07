@@ -18,7 +18,7 @@ esac
 [ -z "$file_path" ] && exit 0
 
 case "$file_path" in
-  *.ts|*.tsx|*.js|*.jsx|*.swift|*.kt|*.java|*.m|*.mm|*.cpp|*.h)
+  *.ts|*.tsx|*.js|*.jsx|*.swift|*.kt|*.kts|*.java|*.m|*.mm|*.cpp|*.h)
     jq -n --arg reason "Code file change to ${file_path} requires explicit approval before writing (org policy: require-approval-before-code)." \
       '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "ask", permissionDecisionReason: $reason}}'
     exit 0

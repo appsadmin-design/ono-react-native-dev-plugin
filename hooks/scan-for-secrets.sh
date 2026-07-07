@@ -41,7 +41,7 @@ for entry in "${patterns[@]}"; do
   name="${entry%%:*}"
   regex="${entry#*:}"
   if grep -qEi -- "$regex" <<<"$content"; then
-    echo "Blocked: possible hardcoded secret (${name}) in ${file_path:-<unknown file>}. Remove the credential and use secure storage/env injection instead (see standards/mobile-security-standards.md, SEC-SECRETS-*)." >&2
+    echo "Blocked: possible hardcoded secret (${name}) in ${file_path:-<unknown file>}. Remove the credential and use secure storage/env injection instead (see standards/shared/mobile-security.md, SEC-SECRETS-*)." >&2
     exit 2
   fi
 done

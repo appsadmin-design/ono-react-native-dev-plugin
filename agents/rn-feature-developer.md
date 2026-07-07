@@ -13,17 +13,17 @@ description: Implements React Native/TypeScript code per the org's standards, us
 2. Confirm any `depends-on` tasks are already implemented before starting.
 3. If the task touches UI, check the dev plan's `figma_link`. **If it's empty, stop and ask the human for one before implementing** — don't guess spacing, color, or typography from the task description alone. If it's present, use the `figma` MCP server to pull Dev Mode specs (variables, spacing, typography, Code Connect component mappings) for the relevant frame and implement to match, rather than eyeballing a screenshot.
 4. Implement against every applicable standard for the surface being touched:
-   - `standards/react-native-coding-standards.md` (`RN-*`) — always applicable.
-   - `standards/api-service-layer-standards.md` (`API-*`) — for anything touching data fetching.
-   - `standards/state-management-standards.md` (`STATE-*`) — for anything touching shared/global state.
-   - `standards/i18n-rtl-standards.md` (`I18N-*`) and `standards/accessibility-standards.md` (`A11Y-*`) — for anything touching UI.
-   - `standards/architecture-principles.md` (`ARCH-*`) and `standards/navigation-standards.md` (`NAV-*`) — for anything touching folder placement or navigation.
+   - `standards/react-native/react-native-coding-standards.md` (`RN-*`) — always applicable.
+   - `standards/react-native/rn-api-service-layer.md` (`API-*`) — for anything touching data fetching.
+   - `standards/react-native/rn-state-management.md` (`STATE-*`) — for anything touching shared/global state.
+   - `standards/shared/i18n-rtl.md` (`I18N-*`) and `standards/shared/accessibility.md` (`A11Y-*`) — for anything touching UI.
+   - `standards/react-native/rn-architecture.md` (`ARCH-*`) and `standards/react-native/react-navigation.md` (`NAV-*`) — for anything touching folder placement or navigation.
 5. Self-check the change against the task's acceptance criteria before reporting done.
 6. Report which standard IDs were actually applied (not just "reviewed") — this is what `rn-code-reviewer`, `rn-performance-reviewer`, and QA handoff trace back to.
 
 ## Usage in other stages
 
-**`/fix-review-comments`**: `rn-debugger` owns root-causing the reported issue; `rn-feature-developer` is handed the diagnosis and applies the minimal code fix, re-checking it against whichever standard ID the original finding cited.
+**`/fix-review-comments`**: the shared `mobile-debugging` skill owns root-causing the reported issue; `rn-feature-developer` is handed the diagnosis (for findings attributed to the react-native platform) and applies the minimal code fix, re-checking it against whichever standard ID the original finding cited.
 
 **`/create-dev-qa-notes`**: no code is written here — `rn-feature-developer` instead summarizes what was actually built (screens/flows touched, standard IDs applied) as input to `templates/qa-handoff-template.md`.
 

@@ -1,20 +1,14 @@
 ---
 name: rn-dev-planning
-description: Methodology for turning a feature analysis into a dev plan and task breakdown. Used by /create-dev-plan via the rn-architect agent and dev-plan/task-breakdown templates.
+description: React Native-specific vocabulary and standard IDs for the Technical Approach section of a dev plan. Used by /create-dev-plan alongside the shared mobile-dev-planning skill, which owns the plan's overall mechanics.
 ---
 
 ## Methodology
 
-1. **Start from the Analyze-stage output.** Use `rn-architect`'s technical approach and `repo-analyst`'s detected conventions (nav library, state mgmt, folder structure) as the basis for the plan — don't re-derive them from scratch.
+The shared `mobile-dev-planning` skill owns dev-plan mechanics (frontmatter, task decomposition, dependencies, risks, rollback plan, draft-until-approved gate). This skill supplies only the React Native-specific content for the Technical Approach section:
 
-2. **Populate `templates/dev-plan-template.md`'s frontmatter** (`feature`, `dd_link`, `author`, `status: draft`, `date`) and its Overview, Impacted Areas, and Technical Approach sections, citing the relevant standard IDs (`ARCH-*`, `API-*`, `STATE-*`, `NAV-*`) the approach follows.
+1. **Use `rn-architect`'s technical approach and `repo-analyst`'s detected conventions** (nav library, state mgmt, folder structure) as the basis for the approach — don't re-derive them from scratch.
 
-3. **Decompose the technical approach into discrete tasks** in `templates/task-breakdown-template.md`. Each task must be small enough for a single `/implement-task` run and carry concrete, checkable acceptance criteria — avoid vague criteria like "works correctly."
+2. **Cite the relevant standard IDs** (`ARCH-*` from `standards/react-native/rn-architecture.md`, `API-*` from `standards/react-native/rn-api-service-layer.md`, `STATE-*` from `standards/react-native/rn-state-management.md`, `NAV-*` from `standards/react-native/react-navigation.md`) the approach follows.
 
-4. **Record dependencies between tasks** in the `depends-on` column so `/implement-task` can be run in a valid order.
-
-5. **Flag risks and open questions explicitly** in the dev plan's Risks & Open Questions section rather than silently picking an assumption — anything that would change the technical approach if answered differently belongs here.
-
-6. **Write a Rollback Plan** before task breakdown is considered final — how this change gets reverted if it ships broken (feature flag, revert commit, migration reversal).
-
-7. **Leave `status: draft`** until a human explicitly approves the plan — `/implement-task` should not run against a plan still in draft.
+3. **Write the approach in RN vocabulary** (screens, state/data slices or equivalents, navigation routes/params, feature-folder placement) — this becomes the flat Technical Approach section for a react-native-only feature, or the `### React Native` subsection for a mixed-platform feature.

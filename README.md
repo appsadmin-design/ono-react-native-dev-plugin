@@ -1,8 +1,8 @@
-# ono-react-native-dev-plugin
+# ono-mobile-dev-plugin
 
-A [Claude Code](https://claude.com/claude-code) plugin encoding Ono Apps' React Native SDLC workflow: a seven-stage pipeline that takes a feature from analysis to release, with a human approval gate between every stage.
+A [Claude Code](https://claude.com/claude-code) plugin encoding Ono Apps' mobile-division SDLC workflow: a seven-stage pipeline that takes a feature from analysis to release, with a human approval gate between every stage — across **React Native**, native **iOS**, native **Android**, and **React (web)**, and any mix of them in the same repo.
 
-Each stage is a slash command backed by a dedicated skill and specialized subagents (architect, developer, code/performance/security reviewers, debugger, release engineer). Every stage reads the approved template output of the previous one, so the whole pipeline stays traceable from feature request to shipped release.
+Each stage is a slash command backed by a dedicated skill and specialized subagents. Process is shared across every platform; platform-specific knowledge (coding standards, architecture, performance concerns) is loaded only for the platform(s) a given task actually touches. Every stage reads the approved template output of the previous one, so the whole pipeline stays traceable from feature request to shipped release.
 
 ## Install
 
@@ -10,25 +10,61 @@ From the marketplace:
 
 ```
 /plugin marketplace add appsadmin-design/ono-plugin-marketplace
-/plugin install ono-react-native-dev-plugin@ono-plugin-marketplace
+/plugin install ono-mobile-dev-plugin@ono-plugin-marketplace
 ```
 
 Local (for development of the plugin itself):
 
 ```bash
-claude --plugin-dir /path/to/ono-react-native-dev-plugin
+claude --plugin-dir /path/to/ono-mobile-dev-plugin
 ```
+
+## What this plugin supports
+
+- **React Native** — the plugin's original, most fully-built-out platform. Full standards, skills, and agents.
+- **Native iOS** and **Native Android** — routing, platform detection, and folder structure are fully wired up; the standards/skills/agents themselves are currently structure-only placeholders (see [Plugin internals](#plugin-internals)) waiting to be authored.
+- **React (web)** — a plain browser SPA (Vite/CRA/Next.js), not React Native for Web. Also structure-only placeholders today. Kept as a fully separate module from React Native despite overlapping JS/TS/React fundamentals, since the two target genuinely different runtimes (browser vs. native shell).
+- **Mixed repos** — a React Native repo with native iOS and/or Android changes, or a native monorepo containing both an iOS and an Android project, or a monorepo pairing a React web app with an RN/native app.
+
+The shared layer keeps its `mobile-*` naming (`mobile-repo-analysis`, `mobile-security-review`, `/prepare-mobile-release`, etc.) even though React (web) isn't literally mobile — Ono Apps is a mobile division that also owns a React web app, so the umbrella name stayed put rather than triggering a broader rename.
+
+## How platform detection works
+
+Every command starts by inspecting the repo (via the `repo-analyst` agent) before doing anything platform-specific:
+
+1. **Raw signal checks** — for React Native: `package.json` with a `react-native` dependency, `metro.config.js`, `app.json`/`app.config.*`, `ios/`/`android/` folders. For native iOS: `.xcodeproj`/`.xcworkspace`/`Package.swift`, `Podfile`, `Info.plist`, Swift/Obj-C files. For native Android: `settings.gradle(.kts)`/`build.gradle(.kts)`, `app/src/main`, `AndroidManifest.xml`, Kotlin/Java files. For React (web): `react`/`react-dom` in `package.json` **without** a `react-native` dependency, plus a web bundler/framework marker (`vite.config.*`, `webpack.config.*`, `next.config.*`, or `react-scripts`).
+2. **Disambiguate RN's own native shell from an unrelated native project** — when both RN and a native platform look present, `repo-analyst` checks *linkage* (does the `Podfile` call `use_react_native!`, does `build.gradle` apply the `com.facebook.react` plugin), not just location, before deciding whether the native folder is RN's shell or an independent project.
+3. **Monorepo workspace scoping** — if monorepo tooling (Nx, Turborepo, Yarn/PNPM workspaces) is detected, the whole procedure runs per touched workspace/package rather than once for the whole repo. This is what lets a monorepo pairing `apps/web` (React) with `apps/mobile` (RN) resolve correctly.
+4. **If detection isn't confident, the plugin asks.** A single-marker tie, no verdict at all, or an inconclusive linkage check stops the command and asks you to pick the platform explicitly — it never guesses a default.
+
+The `platform` value (`react-native` / `ios` / `android` / `react` / `mixed`) is recorded in `templates/feature-analysis-template.md`'s frontmatter by `/analyze-feature` and carried forward through every later stage — `/create-dev-plan`, `/implement-task`, and the rest read it rather than re-detecting.
+
+## How shared vs. platform-specific context loads
+
+- **Shared context always loads.** Repo/platform detection, security review taxonomy, accessibility/i18n principles, release-readiness checklist criteria, and QA-handoff criteria are platform-agnostic and used on every task regardless of platform.
+- **Platform-specific context loads only for platforms actually touched.** A React-Native-only task never loads `standards/ios/*` or `standards/android/*`; a native-iOS-only repo never loads `standards/react-native/*`.
+- **Mixed repos load shared + only the touched platform modules.** A React Native repo with a diff under `ios/` loads shared + react-native + ios. The same RN repo with a diff under `android/` loads shared + react-native + android. A diff touching both native folders loads all four. A native monorepo (iOS + Android, no RN) loads only whichever platform(s) the changed files/task scope actually touch — never both unconditionally.
+- **No cross-platform mixing within a single-platform task.** React Native, iOS, and Android standards are never combined for a task that only touches one of them.
+
+### Examples
+
+- **React Native only**: `/analyze-feature "add biometric login"` detects `platform: react-native`, routes to `rn-architect`, and the resulting feature analysis, dev plan, and every later stage stay entirely within the react-native module.
+- **Native iOS only**: a repo with `MyApp.xcodeproj`, a `Podfile` with no RN pod, and Swift sources detects `platform: ios`, routing to `ios-architect`/`ios-feature-developer`/etc.
+- **Native Android only**: a repo with `settings.gradle.kts`, `app/src/main`, and Kotlin sources detects `platform: android`, routing to the `android-*` agents.
+- **React (web) only**: a repo with `react`/`react-dom` in `package.json`, a `vite.config.ts`, and no `react-native` dependency detects `platform: react`, routing to the `react-*` agents.
+- **Mixed (RN + native)**: an RN repo where a feature touches both `ios/` and `android/` native modules detects `platform: mixed`, invokes `rn-architect`, `ios-architect`, and `android-architect` independently, and merges their output into platform-tagged subsections of the feature analysis.
+- **Mixed (monorepo, web + mobile)**: a monorepo with `apps/web` (React) and `apps/mobile` (RN) — a diff touching only `apps/web` loads shared + react; a diff touching only `apps/mobile` loads shared + react-native (+ native platforms if RN's own shells are touched).
 
 ## Quick start
 
-Taking a feature from idea to release:
+Taking a feature from idea to release (this example is React Native; the flow is identical for any platform, with `platform` in the frontmatter driving which agents/standards get used):
 
 ```
-# 1. Analyze the feature against the repo's actual conventions
+# 1. Analyze the feature against the repo's actual conventions and detected platform
 #    (optionally include a Figma link — required if the feature has new UI)
 /analyze-feature Add biometric login to the auth flow — design: https://figma.com/file/...
 
-#    → produces a feature analysis with status: proposed
+#    → produces a feature analysis with status: proposed, platform: react-native
 #    → a human reviews it and flips status to approved
 
 # 2. Turn the approved analysis into a dev plan + task breakdown
@@ -51,34 +87,36 @@ Taking a feature from idea to release:
 /prepare-mobile-release 2.14.0
 ```
 
-The pipeline is deliberately gated: `/create-dev-plan` refuses to run on a feature analysis still marked `proposed`, and `/implement-task` only works from an approved plan — a human signs off between every stage.
+The pipeline is deliberately gated: `/create-dev-plan` refuses to run on a feature analysis still marked `proposed`, and `/implement-task` only works from an approved plan — a human signs off between every stage. Code edits are additionally gated by the `require-approval-before-code` hook regardless of platform.
 
 ## Commands
 
 | Command | Arguments | What it does |
 |---|---|---|
-| `/analyze-feature` | feature description or DD link (± Figma link) | Detects the repo's actual stack and conventions, then proposes a technical approach; output starts as `status: proposed` |
-| `/create-dev-plan` | feature name | Turns an **approved** feature analysis into a dev plan + task breakdown |
-| `/implement-task` | task id | Implements a single task from the approved breakdown |
-| `/review-code` | scope (optional) | Reviews changes for correctness, style, standards-adherence, and performance; defaults to the current diff against the base branch |
-| `/review-security` | scope (optional) | Reviews changes for mobile security risk against the org's security standards |
-| `/fix-review-comments` | review-notes path | Addresses outstanding findings from a completed review notes file |
-| `/create-dev-qa-notes` | feature name | Writes QA handoff notes for the completed feature |
-| `/prepare-mobile-release` | version | Validates that the mobile app is ready to ship the given version |
+| `/analyze-feature` | feature description or DD link (± Figma link) | Detects the platform and the repo's actual stack/conventions, then proposes a technical approach via the matching platform architect(s); output starts as `status: proposed` and records the detected `platform` |
+| `/create-dev-plan` | feature name | Turns an **approved** feature analysis into a dev plan + task breakdown, reading `platform` rather than re-detecting |
+| `/implement-task` | task id | Implements a single task from the approved breakdown, using the task's own `platform` value; gated by the `require-approval-before-code` hook |
+| `/review-code` | scope (optional) | Detects touched platform(s) from the diff; reviews for correctness, style, standards-adherence, and performance using shared + platform-specific standards; defaults to the current diff against the base branch |
+| `/review-security` | scope (optional) | Always uses the shared mobile security standards; adds platform-specific concerns/examples only when relevant |
+| `/fix-review-comments` | review-notes path | Root-causes findings (grouped by platform for a mixed review) and delegates each fix to the matching platform's feature-developer agent |
+| `/create-dev-qa-notes` | feature name | Writes shared QA handoff notes with platform-specific build/install/testing instructions |
+| `/prepare-mobile-release` | version | Validates shippability with a shared checklist plus platform-specific release validation for every platform the release ships |
 
 ## Pipeline
 
-| Stage | Command | Skill | Agent(s) |
+| Stage | Command | Shared skill/agent | Platform-specific skill/agent (per platform touched) |
 |---|---|---|---|
-| 1. Analyze | `/analyze-feature` | `rn-repo-analysis` | `repo-analyst`, `rn-architect` |
-| 2. Plan | `/create-dev-plan` | `rn-dev-planning` | `rn-architect` |
-| 3. Implement | `/implement-task` | `rn-feature-implementation` | `rn-feature-developer` |
-| 4. Review | `/review-code`, `/review-security` | `rn-code-review`, `rn-security-review` | `rn-code-reviewer`, `rn-performance-reviewer`, `rn-security-reviewer` |
-| 5. Fix | `/fix-review-comments` | `rn-debugging` | `rn-debugger`, `rn-feature-developer` |
-| 6. QA handoff | `/create-dev-qa-notes` | `rn-testing-and-qa-handoff` | `rn-feature-developer` |
-| 7. Release | `/prepare-mobile-release` | `rn-release-readiness` | `rn-release-engineer`, `rn-performance-reviewer` |
+| 1. Analyze | `/analyze-feature` | `mobile-repo-analysis`, `repo-analyst` | `rn-architect` / `ios-architect` / `android-architect` / `react-architect` |
+| 2. Plan | `/create-dev-plan` | `mobile-dev-planning` | `rn-dev-planning` / `ios-dev-planning` / `android-dev-planning` / `react-dev-planning` (via the matching architect) |
+| 3. Implement | `/implement-task` | — (no shared implementation skill; the approval gate applies to all) | `rn-feature-implementation`/`rn-feature-developer`, and the `ios-`/`android-`/`react-` equivalents |
+| 4. Review | `/review-code`, `/review-security` | `mobile-security-review`, `mobile-security-reviewer` (security only) | `rn-code-review`/`rn-code-reviewer`/`rn-performance-reviewer`, and the `ios-`/`android-`/`react-` equivalents (code review + performance) |
+| 5. Fix | `/fix-review-comments` | `mobile-debugging` (root-causing) | `rn-feature-developer` / `ios-feature-developer` / `android-feature-developer` / `react-feature-developer` (applies the fix) |
+| 6. QA handoff | `/create-dev-qa-notes` | `mobile-testing-and-qa-handoff` | the relevant platform feature-developer agent(s), for build/install/testing instructions |
+| 7. Release | `/prepare-mobile-release` | `mobile-release-readiness`, `mobile-release-engineer` | `rn-performance-reviewer` / `ios-performance-reviewer` / `android-performance-reviewer` / `react-performance-reviewer` (perf sign-off per shipping platform) |
 
-`repo-analyst` has no dedicated command — it's invoked by other agents/skills as a first step.
+`repo-analyst` has no dedicated command — it's invoked by other agents/skills as a first step, on every stage that needs to know the platform.
+
+Note the asymmetry by design: code review and feature implementation have **no shared skill** (each platform's process differs enough that a shared layer wasn't worth it), while dev planning, security review, debugging, QA handoff, and release readiness **are** shared, with platform-specific detail supplied either by a thin companion skill (dev planning) or by passing detected-platform context into one shared agent (security review, release engineering).
 
 Each stage after Analyze reads its input from the previous stage's approved template output: `/analyze-feature` → `feature-analysis-template.md` → `/create-dev-plan` → `dev-plan-template.md` + `task-breakdown-template.md` → `/implement-task` → … → `/prepare-mobile-release`.
 
@@ -86,8 +124,12 @@ Each stage after Analyze reads its input from the previous stage's approved temp
 
 Every agent works against the org's written standards rather than assumed defaults:
 
-- **`standards/`** — architecture principles, React Native coding standards, state management, navigation, API service layer, mobile security, accessibility, and i18n/RTL standards. Reviews cite standard IDs in their findings.
-- **`templates/`** — one structured template per pipeline artifact: feature analysis, dev plan, task breakdown, code review, security review, QA handoff, and release checklist. Stages communicate exclusively through these filled-in templates.
+- **`standards/shared/`** — mobile security, accessibility, i18n/RTL, release readiness, and QA handoff. Loaded on every task regardless of platform. Today's rule text in `mobile-security.md`, `accessibility.md`, and `i18n-rtl.md` is written from React Native experience (prop names, library names); iOS/Android/React-native equivalents are noted as not-yet-authored gaps rather than silently assumed equivalent.
+- **`standards/react-native/`** — React Native/TypeScript coding standards, navigation, state management, API service layer, architecture, and performance. The most fully authored module.
+- **`standards/ios/`**, **`standards/android/`**, **`standards/react/`** — structure-only placeholders (Swift/Kotlin/React coding standards, UI-framework conventions, architecture, build/signing or bundler config, and performance) mirroring the react-native set, ready to be authored.
+- **`templates/`** — one structured template per pipeline artifact: feature analysis, dev plan, task breakdown, code review, security review, QA handoff, and release checklist. Stages communicate exclusively through these filled-in templates. Every template that needs to know the platform carries a `platform` field (frontmatter or a per-row column), and the code-review/release-checklist templates support platform-tagged findings/subsections for mixed-platform work.
+
+Reviews cite standard IDs in their findings.
 
 ## Safety hooks
 
@@ -96,20 +138,62 @@ Three hooks are always active while the plugin is installed:
 | Hook | What it does |
 |---|---|
 | `protect-secrets` | Blocks any file write/edit that would introduce a hardcoded secret (API keys, tokens, private keys) |
-| `require-approval-before-code` | Forces a human-approval prompt before any code file is written or edited — even in auto-approve modes; docs and config pass through untouched |
+| `require-approval-before-code` | Forces a human-approval prompt before any code file is written or edited — even in auto-approve modes; covers React/TypeScript, Swift/Obj-C, and Kotlin/Java/Kotlin-script (`.kts`) files across every platform; docs and config pass through untouched |
 | `block-main-branch-changes` | Blocks file changes while checked out on `main`/`master`, enforcing a feature-branch workflow |
+
+All three hooks are already platform-agnostic and required no changes for iOS/Android/React support beyond adding the `.kts` extension.
 
 ## MCP servers
 
-- **`figma`** (`https://mcp.figma.com/mcp`) — the hosted Figma MCP server, used by `/analyze-feature` and `/implement-task` to pull design context, screenshots, and variables from a Figma file. Each developer authenticates once via OAuth on first use (`/mcp` to check connection status).
+- **`figma`** (`https://mcp.figma.com/mcp`) — the hosted Figma MCP server, used by `/analyze-feature` and `/implement-task` to pull design context, screenshots, and variables from a Figma file, regardless of platform. Each developer authenticates once via OAuth on first use (`/mcp` to check connection status).
 
 ## Plugin internals
 
-| Piece | Contents |
-|---|---|
-| `commands/` | The eight pipeline slash commands listed above |
-| `skills/` | One skill per stage: `rn-repo-analysis`, `rn-dev-planning`, `rn-feature-implementation`, `rn-code-review`, `rn-security-review`, `rn-debugging`, `rn-testing-and-qa-handoff`, `rn-release-readiness` |
-| `agents/` | `repo-analyst`, `rn-architect`, `rn-feature-developer`, `rn-code-reviewer`, `rn-performance-reviewer`, `rn-security-reviewer`, `rn-debugger`, `rn-release-engineer` |
-| `standards/` | Eight org standards documents cited by reviews |
-| `templates/` | Seven structured templates the stages communicate through |
-| `hooks/` | The three safety hooks listed above |
+```
+commands/                          (flat — same 8 commands, now platform-aware)
+  analyze-feature.md
+  create-dev-plan.md
+  implement-task.md
+  review-code.md
+  review-security.md
+  fix-review-comments.md
+  create-dev-qa-notes.md
+  prepare-mobile-release.md
+
+skills/                             (flat, one level — prefix = scope)
+  mobile-repo-analysis/             mobile-dev-planning/          mobile-security-review/
+  mobile-debugging/                 mobile-testing-and-qa-handoff/ mobile-release-readiness/
+  rn-dev-planning/  rn-feature-implementation/  rn-code-review/
+  ios-dev-planning/ ios-feature-implementation/ ios-code-review/      (placeholders)
+  android-dev-planning/ android-feature-implementation/ android-code-review/  (placeholders)
+  react-dev-planning/   react-feature-implementation/   react-code-review/    (placeholders)
+
+agents/                             (flat)
+  repo-analyst.md  mobile-security-reviewer.md  mobile-release-engineer.md
+  rn-architect.md  rn-feature-developer.md  rn-code-reviewer.md  rn-performance-reviewer.md
+  ios-architect.md ios-feature-developer.md ios-code-reviewer.md ios-performance-reviewer.md      (placeholders)
+  android-architect.md android-feature-developer.md android-code-reviewer.md android-performance-reviewer.md  (placeholders)
+  react-architect.md   react-feature-developer.md   react-code-reviewer.md   react-performance-reviewer.md    (placeholders)
+
+standards/
+  shared/       mobile-security.md, accessibility.md, i18n-rtl.md, release-readiness.md, qa-handoff.md
+  react-native/ react-native-coding-standards.md, react-navigation.md, rn-state-management.md,
+                rn-performance.md, rn-architecture.md, rn-api-service-layer.md
+  ios/          swift-standards.md, swiftui-uikit-standards.md, ios-architecture.md,
+                xcode-build-signing.md, ios-performance.md               (placeholders)
+  android/      kotlin-standards.md, compose-xml-standards.md, android-architecture.md,
+                gradle-build-signing.md, android-performance.md          (placeholders)
+  react/        react-coding-standards.md, react-routing.md, react-state-management.md,
+                react-performance.md, react-architecture.md, react-api-service-layer.md  (placeholders)
+
+templates/                          (flat — shared pipeline artifacts, now platform-aware)
+  feature-analysis-template.md, dev-plan-template.md, task-breakdown-template.md,
+  code-review-template.md, security-review-template.md, qa-handoff-template.md,
+  release-checklist-template.md
+
+hooks/                               (unchanged — already platform-agnostic)
+  protect-secrets.json/scan-for-secrets.sh, require-approval-before-code.json/.sh,
+  block-main-branch-changes.json/.sh
+```
+
+`standards/` nests into `shared/`/`react-native/`/`ios/`/`android/`/`react/` subfolders — it holds plain reference files, not components Claude Code discovers by name, so nesting is safe. `agents/` and `skills/` stay flat with prefix-based naming (`rn-`/`ios-`/`android-`/`react-`, unprefixed for shared) instead: Claude Code's plugin loader discovers agents as flat files and skills as one level of `skills/<name>/SKILL.md` nesting, with no documented support for a second nesting level, so the flat-with-prefix convention this repo already used for React Native was extended to the new platforms rather than introducing per-platform subfolders that discovery might not pick up.

@@ -1,12 +1,12 @@
 # Code Review
 
-<!-- Files/PR/branch reviewed, commit SHA, date, reviewers (rn-code-reviewer, rn-performance-reviewer). -->
+<!-- Files/PR/branch reviewed, commit SHA, date, reviewers (the code-reviewer + performance-reviewer agent for each platform touched, e.g. rn-code-reviewer/rn-performance-reviewer, ios-code-reviewer/ios-performance-reviewer, etc.). Also note "Platforms Reviewed" — the platform(s) this diff was attributed to. -->
 ## Scope
 
-<!-- List of standard IDs from react-native-coding-standards.md, api-service-layer-standards.md, state-management-standards.md, i18n-rtl-standards.md, accessibility-standards.md, architecture-principles.md, navigation-standards.md that were applicable and checked. -->
+<!-- List of standard IDs from standards/shared/*.md and each touched platform's standards/<platform>/*.md that were applicable and checked. -->
 ## Standards Checked
 
-<!-- Every finding: `file:line` — [standard ID] description — remediation. Use "None found" if empty. -->
+<!-- Every finding: `[platform] file:line` — [standard ID] description — remediation. Severity stays the primary organizing axis even for a mixed-platform review — do not split this section by platform, tag each finding inline instead. Use "None found" if empty. -->
 ## Findings by Severity
 
 ### Blocking
@@ -17,7 +17,7 @@
 
 ### Nit
 
-<!-- rn-performance-reviewer's findings for this diff: re-renders, list virtualization, JS-thread blocking, image handling, bundle size. Same severity scale as above. "None found" if empty. -->
+<!-- Each touched platform's performance-reviewer's findings for this diff, tagged [platform] (e.g. re-renders/virtualization/JS-thread/images/bundle size for react-native; the platform-equivalent concerns for ios/android/react). Same severity scale as above. "None found" if empty. -->
 ## Performance
 
 <!-- Checklist items explicitly marked Not Applicable, with a one-line reason each. -->

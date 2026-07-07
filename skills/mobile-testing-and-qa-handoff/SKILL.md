@@ -1,0 +1,20 @@
+---
+name: mobile-testing-and-qa-handoff
+description: Shared methodology for writing QA handoff notes for a completed feature, across any platform, with platform-specific build/install/testing instructions. Used by /create-dev-qa-notes via the relevant platform feature-developer agent(s) and the qa-handoff template.
+---
+
+## Methodology
+
+1. **Gather the source material.** Pull the feature summary from the relevant platform feature-developer agent's report for `[feature-name]`: what was built, which screens/flows it touches, and which standard IDs were applied. For a mixed-platform feature, gather from every platform feature-developer agent that appears in the feature's task breakdown (`rn-feature-developer`/`ios-feature-developer`/`android-feature-developer`/`react-feature-developer`), not just one.
+
+2. **Write test steps for a non-engineer**, per `QA-STEPS-1` in `standards/shared/qa-handoff.md`. Convert the implementation into numbered, step-by-step instructions someone with no codebase context can follow exactly — name the actual screen/button/label text, not component names.
+
+3. **Call out edge cases explicitly**, per `QA-EDGE-1`. List boundary/error conditions that were exercised (empty states, offline, slow network, permission-denied, validation errors) — don't assume QA will think to try them.
+
+4. **State known limitations plainly**, per `QA-LIMIT-1`. Anything intentionally out of scope for this change gets a one-line reason and, if there's a follow-up task, a reference to it. Never omit this section to make the handoff look more complete than it is.
+
+5. **Confirm i18n/RTL and accessibility were actually checked**, not just implemented, per `QA-A11Y-1`. Cite the specific `I18N-*`/`A11Y-*` standard IDs the feature-developer applied, and whether the required manual walkthroughs were performed — a generic "looks fine" checkbox is not sufficient.
+
+6. **Add platform-specific build/install/testing instructions**, one subsection per platform the feature touches: RN — Metro/Expo Go, simulator/device run, or an internal build link; iOS — Xcode run, TestFlight; Android — Android Studio run, internal APK/Play Console track; React (web) — local dev server, preview/staging URL.
+
+7. **Populate `templates/qa-handoff-template.md` in full**, per `QA-COMPLETE-1` — including every section even when the answer is "None" (e.g. Known Limitations), so QA has a complete, unambiguous handoff.
