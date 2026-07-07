@@ -7,7 +7,7 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/). The
 version below is the plugin's own `version` in
 [`plugin.json`](.claude-plugin/plugin.json).
 
-## [Unreleased]
+## [0.2.0] - 2026-07-07
 
 ### Changed
 - Evolved the plugin from a React-Native-only workflow into a mobile-division
