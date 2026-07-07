@@ -13,7 +13,17 @@ Turn an approved DD into discrete, implementable tasks — the task-generation s
 
 3. **Verify the DD's Definition of Ready (§26).** Before decomposing, confirm §26's checklist is satisfied and that §24 Open Questions and §22 Risks contain nothing that would block delivery. If unresolved blockers remain, stop and surface them rather than generating tasks against an unstable design.
 
-4. **Decompose the DD into discrete tasks** in `templates/task-breakdown-template.md`, driven by the DD's Technical Implementation Approach (§19) and Impacted Modules (§20). Each task must be small enough for a single `/implement-task` run, carry a `platform` value (always filled — even for a single-platform feature, so `/implement-task` never has to guess), and have concrete, checkable acceptance criteria — sourced from the DD's Acceptance Criteria Mapping (§25). Avoid vague criteria like "works correctly." For `platform: mixed`, different rows can target different platforms.
+4. **Decompose the DD into discrete tasks** in `templates/task-breakdown-template.md`, driven by the DD's Technical Implementation Approach (§19) and Impacted Modules (§20). Each task must carry a `platform` value (always filled — even for a single-platform feature, so `/implement-task` never has to guess) and concrete, checkable acceptance criteria — sourced from the DD's Acceptance Criteria Mapping (§25). Avoid vague criteria like "works correctly." For `platform: mixed`, different rows can target different platforms.
+
+   **What a good task is — apply this as the decomposition rule, not just advice.** A task should represent a single logical implementation unit, sized for one `/implement-task` run. Each task should:
+
+   - **Touch one responsibility** whenever possible.
+   - Be **independently reviewable** (a reviewer can judge it without the rest of the breakdown in hand).
+   - Be **independently testable** (its acceptance criteria can be verified on their own).
+   - Be **independently revertible** (it can be rolled back without unwinding unrelated work).
+   - **Minimize cross-task dependencies** — keep the `depends-on` graph as shallow as the design allows.
+
+   Prefer more small, focused tasks over fewer large ones. If a candidate task can't satisfy these properties — it spans multiple responsibilities, can't be reviewed or tested or reverted on its own — split it until each resulting task can.
 
 5. **Delegate platform vocabulary and standard-ID citations** to the matching platform-specific dev-planning skill (`rn-/ios-/android-/react-dev-planning`) via the matching architect — so each task's description and acceptance criteria use the right platform terms and cite the right standard IDs.
 
