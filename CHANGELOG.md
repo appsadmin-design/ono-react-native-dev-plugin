@@ -36,11 +36,10 @@ version below is the plugin's own `version` in
 - Repointed the `rn-/ios-/android-/react-dev-planning` companion skills at
   `/dev-design-start` and `/dev-feature-start`.
 
-### Deprecated
-- `/create-dev-plan` and the `mobile-dev-planning` skill. `/create-dev-plan`
-  is retained for one release as a redirecting alias to the two new
-  commands; `mobile-dev-planning` is retained only to back that alias. Both
-  will be removed in a future release.
+### Removed
+- The `/create-dev-plan` command and the `mobile-dev-planning` skill, whose
+  role is fully replaced by the two new stages above. The plugin now exposes
+  only the new SDLC lifecycle, with no backward-compatible alias.
 
 ## [0.2.0] - 2026-07-07
 

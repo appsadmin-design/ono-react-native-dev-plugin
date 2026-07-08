@@ -104,7 +104,6 @@ The pipeline is deliberately gated: `/dev-design-start` refuses to run on a feat
 | `/analyze-feature` | feature description or DD link (± Figma link) | Detects the platform and the repo's actual stack/conventions, then proposes a technical approach via the matching platform architect(s); output starts as `status: proposed` and records the detected `platform` |
 | `/dev-design-start` | feature name | Turns an **approved** feature analysis into a Detailed Design (DD), reading `platform` rather than re-detecting; output starts as `status: draft` |
 | `/dev-feature-start` | feature name | Turns an **approved** DD into a task breakdown + thin feature plan, carrying `platform` and `figma_link` forward |
-| `/create-dev-plan` | feature name | **Deprecated** — the planning stage is now split into `/dev-design-start` then `/dev-feature-start`. Kept as a redirecting alias for one release |
 | `/implement-task` | task id | Implements a single task from the approved breakdown, using the task's own `platform` value; gated by the `require-approval-before-code` hook |
 | `/review-code` | scope (optional) | Detects touched platform(s) from the diff; reviews for correctness, style, standards-adherence, and performance using shared + platform-specific standards; defaults to the current diff against the base branch |
 | `/review-security` | scope (optional) | Always uses the shared mobile security standards; adds platform-specific concerns/examples only when relevant |
@@ -124,8 +123,6 @@ The pipeline is deliberately gated: `/dev-design-start` refuses to run on a feat
 | 6. Fix | `/fix-review-comments` | `mobile-debugging` (root-causing) | `rn-feature-developer` / `ios-feature-developer` / `android-feature-developer` / `react-feature-developer` (applies the fix) |
 | 7. QA handoff | `/create-dev-qa-notes` | `mobile-testing-and-qa-handoff` | the relevant platform feature-developer agent(s), for build/install/testing instructions |
 | 8. Release | `/prepare-mobile-release` | `mobile-release-readiness`, `mobile-release-engineer` | `rn-performance-reviewer` / `ios-performance-reviewer` / `android-performance-reviewer` / `react-performance-reviewer` (perf sign-off per shipping platform) |
-
-`/create-dev-plan` (the former stage 2) is deprecated and retained only as a redirecting alias to `/dev-design-start` + `/dev-feature-start` for one release.
 
 `repo-analyst` has no dedicated command — it's invoked by other agents/skills as a first step, on every stage that needs to know the platform.
 
@@ -166,7 +163,6 @@ All three hooks are already platform-agnostic and required no changes for iOS/An
 commands/                          (flat, platform-aware — one per lifecycle stage)
   analyze-feature.md
   dev-design-start.md               dev-feature-start.md
-  create-dev-plan.md                (deprecated alias → dev-design-start + dev-feature-start)
   implement-task.md
   review-code.md
   review-security.md
@@ -178,7 +174,6 @@ skills/                             (flat, one level — prefix = scope)
   mobile-repo-analysis/             mobile-security-review/
   mobile-debugging/                 mobile-testing-and-qa-handoff/ mobile-release-readiness/
   dev-design-start/  dev-feature-start/    (shared design + task-generation stages)
-  mobile-dev-planning/              (deprecated — backs the create-dev-plan alias only)
   rn-dev-planning/  rn-feature-implementation/  rn-code-review/
   ios-dev-planning/ ios-feature-implementation/ ios-code-review/      (placeholders)
   android-dev-planning/ android-feature-implementation/ android-code-review/  (placeholders)
