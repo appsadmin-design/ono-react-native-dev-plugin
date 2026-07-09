@@ -9,7 +9,7 @@ Each stage is a slash command backed by a dedicated skill and specialized subage
 From the marketplace:
 
 ```
-/plugin marketplace add appsadmin-design/ono-plugin-marketplace
+/plugin marketplace add OnOAppsDev/ono-plugin-marketplace
 /plugin install ono-mobile-dev-plugin@ono-plugin-marketplace
 ```
 
