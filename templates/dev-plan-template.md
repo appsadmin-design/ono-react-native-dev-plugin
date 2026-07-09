@@ -1,29 +1,31 @@
-# Dev Plan Template
+# Feature Plan Template
+
+<!--
+The thin delivery-plan wrapper produced by /dev-feature-start alongside templates/task-breakdown-template.md, from an APPROVED Detailed Design (templates/dd-template.md).
+The DD owns the design (overview, technical approach, impacted modules, risks, acceptance criteria). This doc owns only what the DD does not: task sequencing and the rollback plan — plus the frontmatter /implement-task reads (notably figma_link).
+-->
 
 ```yaml
 feature: # feature name
-dd_link: # link to the Detailed Design doc, if one exists
-figma_link: # carried over from templates/feature-analysis-template.md
-platform: # react-native | ios | android | react | mixed — carried over from templates/feature-analysis-template.md, not re-detected
+dd_link: # path to the approved templates/dd-template.md this plan was built from
+figma_link: # carried over from the DD — /implement-task reads this before implementing UI tasks
+platform: # react-native | ios | android | react | mixed — carried over from the DD, not re-detected
 author: # the relevant platform architect / human author
 status: draft # draft | approved
 date: # YYYY-MM-DD
 ```
 
-<!-- 2-4 sentences: what is being built and why, in plain language. Carried over from the approved templates/feature-analysis-template.md this plan was built from. -->
+<!-- 2-4 sentences: what is being built and why, in plain language. Carried over from the approved DD this plan was built from. -->
 ## Overview
-
-<!-- Screens/views, features, state/data layer, navigation/routing, and native/platform config this change touches. List by path/name, not prose. -->
-## Impacted Areas
-
-<!-- The chosen technical approach, supplied by the shared mobile-dev-planning skill (mechanics) plus the matching platform dev-planning skill (vocabulary/standard IDs) — e.g. for react-native: new/changed state slices or endpoints, navigation changes, folder placement, citing ARCH-*/API-*/STATE-*/NAV-*. For platform: mixed, use subheadings — ### React Native / ### iOS / ### Android / ### React / ### Cross-Platform Coordination — one per platform actually touched. -->
-## Technical Approach
 
 <!-- Populated from templates/task-breakdown-template.md — embed the table here or link to it. -->
 ## Task Breakdown
 
-<!-- Anything uncertain, any assumption that needs a human decision before /implement-task starts. Do not silently resolve these. -->
-## Risks & Open Questions
+<!-- The order tasks should be implemented in, and why — surfacing the cross-task and cross-platform dependencies captured in the task breakdown's depends-on column. -->
+## Sequencing & Dependencies
 
-<!-- How to revert this change if it ships broken: feature flag, revert commit, migration reversal, etc. -->
+<!-- How to revert this change if it ships broken: feature flag, revert commit, migration reversal, etc. Owned here, deliberately NOT folded into the DD. -->
 ## Rollback Plan
+
+<!-- Flip `status` to `approved` once a human has reviewed the plan and task breakdown. /implement-task refuses to run against a plan still in draft. -->
+## Approval

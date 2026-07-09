@@ -19,8 +19,8 @@ date: # YYYY-MM-DD
 <!-- The relevant platform architect's proposed approach: Screens/Views / State & Data / Navigation-Routing / Folder Placement. Cite each platform's standard IDs (ARCH-*/NAV-* for react-native, etc.) each part follows. Grounded strictly in the conventions detected above, not assumed defaults. For platform: mixed, use subheadings — ### React Native / ### iOS / ### Android / ### React / ### Cross-Platform Coordination — one per platform actually touched, each populated independently by that platform's architect and merged here. -->
 ## Proposed Technical Approach
 
-<!-- Anything uncertain, any assumption that needs a human decision before /create-dev-plan turns this into a formal plan. Do not silently resolve these. -->
+<!-- Anything uncertain, any assumption that needs a human decision before /dev-design-start turns this into a Detailed Design. Do not silently resolve these. -->
 ## Open Questions & Risks
 
-<!-- Flip to `approved` once a human has reviewed the above. /create-dev-plan reads only an approved feature analysis. -->
+<!-- Flip to `approved` once a human has reviewed the above. /dev-design-start reads only an approved feature analysis. -->
 ## Approval

@@ -7,6 +7,40 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/). The
 version below is the plugin's own `version` in
 [`plugin.json`](.claude-plugin/plugin.json).
 
+## [0.3.0] - 2026-07-07
+
+### Added
+- A dedicated **Design** stage: `/dev-design-start` + the `dev-design-start`
+  skill turn an approved feature analysis into a Detailed Design (DD),
+  written to the new `templates/dd-template.md`. The skill carries the
+  `platform` and `figma_link` frontmatter forward (never re-detecting),
+  routes the DD's Technical Implementation Approach through the matching
+  platform architect + `*-dev-planning` companion skill, and keeps its
+  consistency/gap-analysis discipline and existing-file strategy
+  (Overwrite/Update/Preserve/Version) so a DD is never blindly overwritten.
+- A dedicated **Feature-start** stage: `/dev-feature-start` + the
+  `dev-feature-start` skill turn an approved DD into
+  `templates/task-breakdown-template.md` plus a thin feature plan, verifying
+  the DD's Definition of Ready before decomposing.
+
+### Changed
+- Split the former single planning stage (`/create-dev-plan`) into the two
+  gated stages above, growing the pipeline from seven to eight stages
+  (Analyze → Design → Feature start → Implement → Review → Fix → QA handoff
+  → Release). Each stage still reads the previous stage's approved template
+  output.
+- Repurposed `templates/dev-plan-template.md` into the thin **feature plan**
+  emitted by `/dev-feature-start` — frontmatter (`dd_link`, `figma_link`,
+  `platform`), Overview, Task Breakdown, Sequencing & Dependencies, and the
+  Rollback Plan (deliberately kept here rather than in the DD).
+- Repointed the `rn-/ios-/android-/react-dev-planning` companion skills at
+  `/dev-design-start` and `/dev-feature-start`.
+
+### Removed
+- The `/create-dev-plan` command and the `mobile-dev-planning` skill, whose
+  role is fully replaced by the two new stages above. The plugin now exposes
+  only the new SDLC lifecycle, with no backward-compatible alias.
+
 ## [0.2.0] - 2026-07-07
 
 ### Changed

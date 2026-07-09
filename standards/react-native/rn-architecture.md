@@ -2,7 +2,7 @@
 
 ## Purpose & Scope
 
-These principles apply to how React Native app code is organized and layered — reviewed by `rn-code-reviewer` via `/review-code` and used by `rn-architect` when proposing a technical approach via `/analyze-feature` and `/create-dev-plan`. Each bullet below carries a stable ID so review findings and design proposals can cite the exact rule they apply. This is a baseline, not exhaustive — reviewers should use judgment for app-specific structure inherited from `repo-analyst`'s detection.
+These principles apply to how React Native app code is organized and layered — reviewed by `rn-code-reviewer` via `/review-code` and used by `rn-architect` when proposing a technical approach via `/analyze-feature` and `/dev-design-start`. Each bullet below carries a stable ID so review findings and design proposals can cite the exact rule they apply. This is a baseline, not exhaustive — reviewers should use judgment for app-specific structure inherited from `repo-analyst`'s detection.
 
 ## Layered Architecture
 

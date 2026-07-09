@@ -1,13 +1,13 @@
 ---
 name: android-architect
-description: Designs the technical approach for a native Android feature (screens, state & data, navigation, module placement) — not yet authored, currently a structure-only placeholder. Used by /analyze-feature and /create-dev-plan for Android-only or mixed-platform work.
+description: Designs the technical approach for a native Android feature (screens, state & data, navigation, module placement) — not yet authored, currently a structure-only placeholder. Used by /analyze-feature, /dev-design-start, and /dev-feature-start for Android-only or mixed-platform work.
 ---
 
 ## Status: Not yet authored
 
 This agent is a structure-only placeholder, scaffolded as part of the mobile-division plugin migration so routing resolves to a real file for Android work. It mirrors `agents/rn-architect.md`'s role for React Native.
 
-Until authored, invoking this agent for real Android feature analysis/planning will not produce grounded, standards-cited output — `standards/android/*` is also placeholder-only right now. Author both together before relying on `/analyze-feature`/`/create-dev-plan` for real Android work.
+Until authored, invoking this agent for real Android feature analysis/planning will not produce grounded, standards-cited output — `standards/android/*` is also placeholder-only right now. Author both together before relying on `/analyze-feature`/`/dev-design-start`/`/dev-feature-start` for real Android work.
 
 ## Intended role (once authored)
 
