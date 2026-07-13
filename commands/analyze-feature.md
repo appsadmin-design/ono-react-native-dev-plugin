@@ -1,9 +1,11 @@
 ---
 description: Analyze a feature request against the current repo's conventions before planning it.
-argument-hint: [feature-description-or-dd-link]
+argument-hint: [feature-description-or-requirement]
 ---
 
-Analyze the feature described in `$ARGUMENTS` (a description or a DD link, optionally including a Figma link) against this repo's actual conventions.
+Analyze the feature described in `$ARGUMENTS` (a feature description, product requirement, or user story, optionally including a Figma link) against this repo's actual conventions.
+
+**No DD exists at this stage.** A Detailed Design (DD) is produced later by `/dev-design-start` from the *approved* Feature Analysis this command creates. Do not ask for a DD, do not expect one as input, and do not treat `$ARGUMENTS` as a DD link — this command is the step that produces the Feature Analysis which later feeds `/dev-design-start`.
 
 1. Apply the `mobile-repo-analysis` skill methodology. Invoke the `repo-analyst` agent first to **detect the platform** (React Native, native iOS, native Android, React web, or a mix) using its platform-detection algorithm, before anything else.
 2. If platform-detection confidence is Low, **stop and ask the human to choose the platform** (React Native / iOS / Android / React / Mixed) before continuing — do not guess.
