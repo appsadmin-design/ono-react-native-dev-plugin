@@ -3,9 +3,13 @@ name: rn-feature-implementation
 description: Methodology for implementing a planned task in a React Native codebase per org standards. Used by /implement-task via the rn-feature-developer agent.
 ---
 
+## Resolved inputs from `/implement-task`
+
+When `/implement-task` invokes this skill it passes resolved, verified, absolute inputs: the target repository root, the Feature Analysis / DD / Dev Plan / Task Breakdown paths, the selected task id, the selected task-row content, the platform, and the Figma link. **When these are provided, they are authoritative** — use them directly and do not re-resolve by searching the workspace or guessing filenames. Only fall back to locating the task breakdown yourself if the command did not pass these inputs.
+
 ## Methodology
 
-1. **Resolve the task.** Look up `[task-id]` in the current `templates/task-breakdown-template.md` output — description, files touched, depends-on, size, acceptance criteria.
+1. **Resolve the task.** Use the task-row content passed by `/implement-task` for `[task-id]` (description, files touched, depends-on, size, acceptance criteria). If it was not passed, look it up in the resolved Task Breakdown path — not a guessed one.
 
 2. **Check dependencies.** Confirm every task listed in `depends-on` is already implemented; if not, stop and surface that instead of guessing at missing context.
 
