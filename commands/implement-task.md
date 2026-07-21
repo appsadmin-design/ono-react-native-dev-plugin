@@ -63,6 +63,7 @@ Confirm **all** of the following before going further. On any failure, stop, nam
 - Every `depends-on` task is complete — see step 6.
 - No unresolved blocker referenced by the task remains.
 - `platform` is present and valid on the row.
+- `device_type` is present and valid — exactly `mobile` or `tv` — resolved from the selected task row if it carries one, otherwise from the Task Breakdown frontmatter. If it is **missing/empty**, is an **invalid value** (anything other than `mobile`/`tv`, including `mixed`), or conflicts between the row and the frontmatter, **stop and report the exact condition** — never default to `mobile` and never re-detect it here.
 - For UI-touching work, a `figma_link` is available (breakdown/Dev Plan/DD). If absent → stop and ask.
 - Branch is **not** `main`/`master` (the `block-main-branch-changes` hook enforces this on write; check it up front too) and repository policy allows edits.
 
@@ -102,6 +103,7 @@ Invoke the routed platform's feature-implementation skill via its feature-develo
 - selected **task id**
 - selected **task row content**
 - **platform**
+- **device_type** (`mobile` or `tv`) — the resolved mobile-vs-TV context signal from step 5; passed through as authoritative context. It does **not** change platform routing (§7): a `tv` task runs on the same platform feature-developer agent + feature-implementation skill as a `mobile` task.
 - **figma_link**, if any
 - **dependency status** (from step 6)
 - **approval status** (from step 5)
