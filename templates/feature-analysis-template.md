@@ -5,6 +5,7 @@ feature: # feature name
 dd_link: # link to the Detailed Design doc, if one exists
 figma_link: # link to the Figma file/frame(s) for this feature's UI, if any — required before proposing screens for a UI-facing feature
 platform: # react-native | ios | android | react | mixed — set by repo-analyst's platform detection; ask the human if confidence was Low
+device_type: # mobile | tv — the mobile-vs-TV target for this feature, resolved by repo-analyst; ask the human if ambiguous. No "mixed" — resolve to exactly one.
 author: # the relevant platform architect / human author
 status: proposed # proposed | approved
 date: # YYYY-MM-DD

@@ -10,6 +10,7 @@ feature: # feature name
 dd_link: # path to the approved templates/dd-template.md this plan was built from
 figma_link: # carried over from the DD — /implement-task reads this before implementing UI tasks
 platform: # react-native | ios | android | react | mixed — carried over from the DD, not re-detected
+device_type: # mobile | tv — carried over from the DD, not re-detected. No "mixed".
 author: # the relevant platform architect / human author
 status: draft # draft | approved
 date: # YYYY-MM-DD

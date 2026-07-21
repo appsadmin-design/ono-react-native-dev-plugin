@@ -7,6 +7,7 @@ dd_link: # path to the approved DD (the generated {FEATURE-NAME}-DD.md, NOT temp
 dev_plan_link: # path to the approved Dev Plan (the generated feature plan file, NOT templates/dev-plan-template.md)
 figma_link: # carried over from the DD / Dev Plan — /implement-task reads this before implementing UI tasks
 platform: # react-native | ios | android | react | mixed — carried over from the DD, not re-detected. For a mixed feature, individual rows still carry a single platform each.
+device_type: # mobile | tv — carried over from the DD, not re-detected. No "mixed". Applies to the whole breakdown; a task-level device-type split is out of scope here (handle later as an explicit task-level requirement).
 status: draft # draft | approved — mirrors the Dev Plan's approval; /implement-task refuses to run against a breakdown still in draft
 date: # YYYY-MM-DD
 ```

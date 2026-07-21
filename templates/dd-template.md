@@ -5,6 +5,7 @@ feature: # feature name
 feature_analysis_link: # path to the approved templates/feature-analysis-template.md this DD was built from
 figma_link: # carried over from the feature analysis — required before designing screens for a UI-facing feature
 platform: # react-native | ios | android | react | mixed — carried over from the feature analysis, not re-detected
+device_type: # mobile | tv — carried over from the feature analysis, not re-detected. No "mixed".
 author: # the relevant platform architect / human author
 status: draft # draft | approved
 detail_level: standard # standard | comprehensive
